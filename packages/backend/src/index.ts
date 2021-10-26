@@ -1,19 +1,32 @@
 import 'reflect-metadata';
 import { ApolloServer } from 'apollo-server';
 import { buildSchema } from 'type-graphql';
+
 import DummyResolver from './dummy-resolver';
+import { createConnection } from 'typeorm';
 
 async function bootstrap() {
-  const schema = await buildSchema({
-    resolvers: [DummyResolver]
-  });
-  const server = new ApolloServer({
-    schema
-  });
+  try {
+    // Create TypeORM connection
+    const connection = await createConnection();
 
-  const port = process.env.PORT || 5050;
-  const { url } = await server.listen(port);
-  console.log(`Listening, go to ${url}`);
+    // Build GraphQL schema from resolve
+    const schema = await buildSchema({
+      resolvers: [DummyResolver],
+    });
+    // Instantiate ApolloServer with schema
+    const server = new ApolloServer({
+      schema,
+    });
+
+    // Make ApolloServer instance listen
+    const port = process.env.PORT || 5050;
+    const { url } = await server.listen(port);
+    console.log(`Listening, go to ${url}`);
+  } catch (err) {
+    console.error('FATAL ERROR', err);
+    process.exit(1);
+  }
 }
 
 bootstrap();
