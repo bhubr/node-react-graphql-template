@@ -3,6 +3,7 @@ import { ApolloServer } from 'apollo-server';
 import { buildSchema } from 'type-graphql';
 
 import DummyResolver from './dummy-resolver';
+import ActivityResolver from './resolver/activity';
 import { createConnection } from 'typeorm';
 
 async function bootstrap() {
@@ -12,7 +13,7 @@ async function bootstrap() {
 
     // Build GraphQL schema from resolve
     const schema = await buildSchema({
-      resolvers: [DummyResolver],
+      resolvers: [DummyResolver, ActivityResolver],
     });
     // Instantiate ApolloServer with schema
     const server = new ApolloServer({

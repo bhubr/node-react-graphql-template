@@ -1,26 +1,42 @@
 import React from 'react';
-import logo from './logo.svg';
+import {
+  useQuery,
+  gql,
+} from '@apollo/client';
 import './App.css';
 
+const GET_ACTIVITIES = gql`
+  query GetActivities {
+    getActivities {
+      id
+      title
+    }
+  }
+`;
+
+interface Activity {
+  id: number;
+  title: string;
+  description?: string;
+}
+
+interface ActivityListData {
+  getActivities: Activity[]
+}
+
+interface ActivityListVars {}
+
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const { loading, error, data } = useQuery<ActivityListData, ActivityListVars>(GET_ACTIVITIES);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error :(</p>;
+  return <div className="App">
+    {
+      data?.getActivities.map(({ id, title }) => (
+        <div key={id}>{title}</div>
+      ))
+    }
+  </div>;
 }
 
 export default App;
