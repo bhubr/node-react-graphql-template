@@ -16,3 +16,4 @@ In my case, it simply f*cked up the TS config, making Apollo Server + TypeGraphQ
 ## Links
 
 * [how to specify ormconfig.ts for typeorm?](https://stackoverflow.com/q/52187328/)
+* [specify that an Arg is an Int (not a Float)](https://dev.to/anztrax/comment/1gn7k)
